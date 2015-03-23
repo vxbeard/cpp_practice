@@ -1,5 +1,5 @@
 #include<iostream>
-#include<cstdlib.h>
+#include<cstdlib>
 using namespace std;
 
 class Point {
@@ -11,25 +11,35 @@ public:
 	int getY() {return _y;}
 };
 
+static std::ostream& operator<<(const std::ostream& out, Point p) {
+    out<<"("<<p.getX()<<","<<p.getY()<<")";
+    return out;
+}
+
 class Polygon {
 private:
 	Point base;
 	int len;
 	int hgt;
 public:
-	Polygon(Point p, int lenght, int height) : base(p), len(length), hgt(height) {}
-	Polygon(Point p1, Point p2) {
-		base = p1;
+	Polygon(Point p, int length, int height) : base(p), len(length), hgt(height) {}
+	Polygon(Point p1, Point p2) : base(p1) {
 		len = abs(p2.getX() - p1.getX());
 		hgt = abs(p2.getY() - p1.getY());
 	}
-}
+
+	Point getP1() {return base;}
+	Point getP2() {return Point(base.getX() + len, base.getY());}
+	Point getP3() {return Point(base.getX(), base.getY() + hgt);}
+	Point getP4() {return Point(base.getX() + len, base.getY() + hgt);}
+};
 
 int main(void) {
 	Point p(1,2);
 	Polygon(p, 2, 3);
 
 	cout<<"Point: "<<p.getX()<<","<<p.getY()<<endl;
+	cout<<"Point: "<<p<<endl;
 
 	return 0;
 }
