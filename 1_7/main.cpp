@@ -28,18 +28,24 @@ public:
 		hgt = abs(p2.getY() - p1.getY());
 	}
 
-	Point getP1() {return base;}
-	Point getP2() {return Point(base.getX() + len, base.getY());}
-	Point getP3() {return Point(base.getX(), base.getY() + hgt);}
-	Point getP4() {return Point(base.getX() + len, base.getY() + hgt);}
+	Point getP1() const {return base;}
+	Point getP2() const {return Point(base.getX() + len, base.getY());}
+	Point getP3() const {return Point(base.getX(), base.getY() + hgt);}
+	Point getP4() const {return Point(base.getX() + len, base.getY() + hgt);}
 };
+
+std::ostream& operator<<(std::ostream& out, const Polygon poly) {
+    out<<"("<<poly.getP1()<<", "<<poly.getP2()<<", "<<poly.getP3()<<", "<<poly.getP4()<<")";
+    return out;
+}
 
 int main(void) {
 	Point p(1,2);
-	Polygon(p, 2, 3);
+	Polygon poly(p, 2, 3);
 
 	cout<<"Point: "<<p.getX()<<","<<p.getY()<<endl;
 	cout<<"Point: "<<p<<endl;
+	cout<<"Polygon:"<<poly<<endl;
 
 	return 0;
 }
