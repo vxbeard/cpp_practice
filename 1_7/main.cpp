@@ -7,11 +7,11 @@ private:
 	int _x,_y;
 public:
 	Point(int x, int y) :_x(x), _y(y) {}
-	int getX() {return _x;}
-	int getY() {return _y;}
+	int getX() const {return _x;}
+	int getY() const {return _y;}
 };
 
-static std::ostream& operator<<(const std::ostream& out, Point p) {
+std::ostream& operator<<(std::ostream& out, const Point p) {
     out<<"("<<p.getX()<<","<<p.getY()<<")";
     return out;
 }
