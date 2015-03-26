@@ -64,6 +64,30 @@ public:
 
 		return Polygon(Point(resX1, resY1), resX2 - resX1, resY2-resY1);
 	}
+
+	Polygon operator+(const Polygon & poly2) {
+		// Calculating x coordinate
+		int poly1X1 = this->getP1().getX();
+		int poly1X2 = this->getP2().getX();
+
+		int poly2X1 = poly2.getP1().getX();
+		int poly2X2 = poly2.getP2().getX();
+
+		int resX1 = poly1X1 < poly2X1 ? poly1X1 : poly2X1;
+		int resX2 = poly1X2 > poly2X2 ? poly1X2 : poly2X2;
+
+		// Calculating y coordinate
+		int poly1Y1 = this->getP1().getY();
+		int poly1Y2 = this->getP4().getY();
+
+		int poly2Y1 = poly2.getP1().getY();
+		int poly2Y2 = poly2.getP4().getY();
+
+		int resY1 = poly1Y1 < poly2Y1 ? poly1Y1 : poly2Y1;
+		int resY2 = poly1Y2 > poly2Y2 ? poly1Y2 : poly2Y2;
+
+		return Polygon(Point(resX1, resY1), resX2 - resX1, resY2-resY1);
+	}
 };
 
 std::ostream& operator<<(std::ostream& out, const Polygon poly) {
@@ -81,9 +105,12 @@ int main(void) {
 	cout<<"Polygon1:"<<poly1<<endl;
 	cout<<"Polygon2:"<<poly2<<endl;
 
-	Polygon poly3 = poly1-poly2;
-
+	Polygon poly3 = poly1 - poly2;
 	cout<<"Polygon3:"<<poly3<<endl;	
+
+	Polygon poly4 = poly1 + poly2;
+	cout<<"Polygon4s:"<<poly4<<endl;	
+
 
 	return 0;
 }
