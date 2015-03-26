@@ -30,8 +30,8 @@ public:
 
 	Point getP1() const {return base;}
 	Point getP2() const {return Point(base.getX() + len, base.getY());}
-	Point getP3() const {return Point(base.getX(), base.getY() + hgt);}
-	Point getP4() const {return Point(base.getX() + len, base.getY() + hgt);}
+	Point getP3() const {return Point(base.getX() + len, base.getY() + hgt);}
+	Point getP4() const {return Point(base.getX(), base.getY() + hgt);}
 
 	Polygon operator-(const Polygon & poly2) {
 		// Calculating x coordinate
@@ -50,13 +50,13 @@ public:
 
 		// Calculating y coordinate
 		int poly1Y1 = this->getP1().getY();
-		int poly1Y2 = this->getP2().getY();
+		int poly1Y2 = this->getP4().getY();
 
 		int poly2Y1 = poly2.getP1().getY();
-		int poly2Y2 = poly2.getP2().getY();
+		int poly2Y2 = poly2.getP4().getY();
 
-		int resY1 = poly1X1 > poly2Y1 ? poly1Y1 : poly2Y1;
-		int resY2 = poly1X2 < poly2Y2 ? poly1Y2 : poly2Y2;
+		int resY1 = poly1Y1 > poly2Y1 ? poly1Y1 : poly2Y1;
+		int resY2 = poly1Y2 < poly2Y2 ? poly1Y2 : poly2Y2;
 
 		if(resY2<resY1) {
 			return Polygon(Point(0,0), 0, 0);
@@ -73,8 +73,8 @@ std::ostream& operator<<(std::ostream& out, const Polygon poly) {
 
 int main(void) {
 	Point p(1,1);
-	Polygon poly1(p, 4, 4);
-	Polygon poly2(Point(2,3), 6, 6);
+	Polygon poly1(p, 8, 4);
+	Polygon poly2(Point(2,3), 2, 6);
 
 	cout<<"Point: "<<p.getX()<<","<<p.getY()<<endl;
 	cout<<"Point: "<<p<<endl;
