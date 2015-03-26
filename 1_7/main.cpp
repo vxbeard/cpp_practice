@@ -93,7 +93,8 @@ public:
 		base = p;
 	}
 
-	void setLenght(unsigned int l) {len = l;}
+	void setLength(unsigned int l) {len = l;}
+	void setHeight(unsigned int h) {hgt = h;}
 };
 
 std::ostream& operator<<(std::ostream& out, const Polygon poly) {
@@ -124,9 +125,15 @@ int main(void) {
 	cout<<"Polygon1:"<<poly1<<endl;
 
 	unsigned int new_len = 6;
-	poly1.setLenght(new_len);
+	poly1.setLength(new_len);
 
-	cout<<"Set new polygon lenght : "<<new_len<<endl;
+	cout<<"Set new polygon length : "<<new_len<<endl;
+	cout<<"Polygon1:"<<poly1<<endl;
+
+	unsigned int new_height = 7;
+	poly1.setHeight(new_height);
+
+	cout<<"Set new polygon height : "<<new_height<<endl;
 	cout<<"Polygon1:"<<poly1<<endl;
 
 	return 0;
