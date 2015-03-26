@@ -19,10 +19,10 @@ std::ostream& operator<<(std::ostream& out, const Point p) {
 class Polygon {
 private:
 	Point base;
-	int len;
-	int hgt;
+	unsigned int len;
+	unsigned int hgt;
 public:
-	Polygon(Point p, int length, int height) : base(p), len(length), hgt(height) {}
+	Polygon(Point p, unsigned int length, unsigned int height) : base(p), len(length), hgt(height) {}
 	Polygon(Point p1, Point p2) : base(p1) {
 		len = abs(p2.getX() - p1.getX());
 		hgt = abs(p2.getY() - p1.getY());
@@ -88,6 +88,12 @@ public:
 
 		return Polygon(Point(resX1, resY1), resX2 - resX1, resY2-resY1);
 	}
+
+	void move(const Point p) {
+		base = p;
+	}
+
+	void setLenght(unsigned int l) {len = l;}
 };
 
 std::ostream& operator<<(std::ostream& out, const Polygon poly) {
@@ -111,6 +117,17 @@ int main(void) {
 	Polygon poly4 = poly1 + poly2;
 	cout<<"Polygon4s:"<<poly4<<endl;	
 
+	Point p2(4,3);
+	poly1.move(p2);
+
+	cout<<"Move polygon1 to point:"<<p2<<endl;
+	cout<<"Polygon1:"<<poly1<<endl;
+
+	unsigned int new_len = 6;
+	poly1.setLenght(new_len);
+
+	cout<<"Set new polygon lenght : "<<new_len<<endl;
+	cout<<"Polygon1:"<<poly1<<endl;
 
 	return 0;
 }
