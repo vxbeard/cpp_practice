@@ -12,3 +12,6 @@ build :
 
 test : build
 	./$(DIST)
+
+clean :
+	rm $(DIST)
