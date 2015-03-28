@@ -1,6 +1,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -57,6 +58,44 @@ ostream& operator<<(ostream& out, const notebook_record& record) {
               <<"==============================================="<<endl;
 }
 
+/*class AbstractNotebookSearch: public unary_function<notebook_record,bool> {
+public:
+    virtual bool operator() (const notebook_record& r) const = 0;
+    virtual ~AbstractNotebookSearch(){}
+};*/
+
+class CompareByName: public unary_function<notebook_record,bool> {
+private:
+    string _key;
+public:
+    explicit CompareByName(string s) : _key(s) {}
+    bool operator() (const notebook_record& r) const {return r.getName() == _key;}
+};
+
+class CompareBySurname: public unary_function<notebook_record,bool> {
+private:
+    string _key;
+public:
+    explicit CompareBySurname(string s) : _key(s) {}
+    bool operator() (const notebook_record& r) const {return r.getSurname() == _key;}
+};
+
+class CompareByBirthDate: public unary_function<notebook_record,bool> {
+private:
+    string _key;
+public:
+    explicit CompareByBirthDate(string s) : _key(s) {}
+    bool operator() (const notebook_record& r) const {return r.getBirthDate() == _key;}
+};
+
+class CompareByPhone: public unary_function<notebook_record,bool> {
+private:
+    string _key;
+public:
+    explicit CompareByPhone(string s) : _key(s) {}
+    bool operator() (const notebook_record& r) const {return r.getPhone() == _key;}
+};
+
 class Notebook {
 private:
     vector<notebook_record> records;
@@ -65,11 +104,22 @@ public:
     Notebook() : records() {};
 
     void addRecord(notebook_record record) {records.push_back(record);}
+
     void showAll() {
         vector<notebook_record>::const_iterator iter;
         for(iter = records.begin(); iter != records.end(); ++iter) {
             cout<<*iter;
         }
+    }
+
+    template<typename TFunctor>
+    notebook_record search(TFunctor functor) const {
+        vector<notebook_record>::const_iterator iter = find_if(records.begin(), records.end(), functor);
+        if (iter != records.end()) {
+            return *iter;
+        }
+
+        throw "Record is absent.";
     }
 };
 
@@ -98,39 +148,51 @@ notebook_record inputRecord() {
 void search_menu(const Notebook& notebook) {
     char ch = 0;
     string keyword;
+    notebook_record record;
 
-    while ((ch != 'q') && (ch != 'Q')) {
-        cout<<"Make search by :"<<endl
-            <<" 1) Name"<<endl
-            <<" 2) Surname"<<endl
-            <<" 3) Date of birth"<<endl
-            <<" 4) Phone number"<<endl
-            <<" ANY) Cancel"<<endl;
-        cin.get(ch);
-        cin.clear();
+    cout<<"Make search by :"<<endl
+        <<" 1) Name"<<endl
+        <<" 2) Surname"<<endl
+        <<" 3) Date of birth"<<endl
+        <<" 4) Phone number"<<endl
+        <<" ANY) Cancel"<<endl;
+    cin.get(ch);
+    while(cin.get() != '\n');
 
+    if (ch < '1' || ch > '4')
+        return;
+
+    cout<<"Searching keyword : ";
+    cin>>keyword;
+
+    try {
         switch(ch) {
-        case '1':
-            break;
-        case '2':
-            break;
-        case '3':
-            break;
-        case '4':
-            break;
-        default:
-            return;
+            case '1':
+                record = notebook.search(CompareByName(keyword));
+                break;
+            case '2':
+                record = notebook.search(CompareBySurname(keyword));
+                break;
+            case '3':
+                record = notebook.search(CompareByBirthDate(keyword));
+                break;
+            case '4':
+                record = notebook.search(CompareByPhone(keyword));
+                break;
+            default:
+                return;
         }
 
-        cout<<"Searching keyword : ";
-        cin>>keyword;
+        cout<<"Record has been founded:"<<endl
+            <<record;
+    } catch (const char* p) {
+        cout<<"Unable to find record("<< p <<")"<<endl;
     }
 }
 
 void sort_menu(Notebook& notebook) {
     char ch = 0;
 
-    /*while ((ch != 'q') && (ch != 'Q')) {*/
     cout<<"Make sort by :"<<endl
         <<" 1) Name"<<endl
         <<" 2) Surname"<<endl
@@ -138,7 +200,7 @@ void sort_menu(Notebook& notebook) {
         <<" 4) Phone number"<<endl
         <<" ANY) Cancel"<<endl;
     cin.get(ch);
-    cin.clear();
+    while(cin.get() != '\n');
 
     switch(ch) {
         case '1':
@@ -152,14 +214,12 @@ void sort_menu(Notebook& notebook) {
         default:
             return;
     }
-    /*}*/
 }
 
 int main() {
     cout<<notebook_record("TestName", "TestSurname", "TestBirthDate", "TestPhone");
 
     Notebook notebook;
-
     char ch = 0;
 
     while ((ch != 'q') && (ch != 'Q')) {
@@ -170,13 +230,15 @@ int main() {
             <<" 4) Sort by..."<<endl
             <<" q) Quit"<<endl;
         cin.get(ch);
-        cin.clear();
+        while(cin.get() != '\n');
 
         switch(ch) {
             case '1':
+                cout<<"Adding new record"<<endl;
                 notebook.addRecord(inputRecord());
                 break;
             case '2':
+                cout<<"Notebook:"<<endl;
                 notebook.showAll();
                 break;
             case '3':
