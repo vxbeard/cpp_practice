@@ -47,6 +47,10 @@ public:
     void setSurname(const string& surname) {
         _surname = surname;
     }
+
+    bool operator<(const notebook_record& rec2) const {
+        return (_name < rec2.getName());
+    }
 };
 
 ostream& operator<<(ostream& out, const notebook_record& record) {
@@ -96,6 +100,34 @@ public:
     bool operator() (const notebook_record& r) const {return r.getPhone() == _key;}
 };
 
+class SortCompareByName: public unary_function<notebook_record,bool> {
+private:
+    string _key;
+public:
+    bool operator() (const notebook_record& r1, const notebook_record& r2) const {return r1.getName() < r2.getName();}
+};
+
+class SortCompareBySurname: public unary_function<notebook_record,bool> {
+private:
+    string _key;
+public:
+    bool operator() (const notebook_record& r1, const notebook_record& r2) const {return r1.getSurname() < r2.getSurname();}
+};
+
+class SortCompareByBirthDate: public unary_function<notebook_record,bool> {
+private:
+    string _key;
+public:
+    bool operator() (const notebook_record& r1, const notebook_record& r2) const {return r1.getBirthDate() < r2.getBirthDate();}
+};
+
+class SortCompareByPhone: public unary_function<notebook_record,bool> {
+private:
+    string _key;
+public:
+    bool operator() (const notebook_record& r1, const notebook_record& r2) const {return r1.getPhone() < r2.getPhone();}
+};
+
 class Notebook {
 private:
     vector<notebook_record> records;
@@ -120,6 +152,15 @@ public:
         }
 
         throw "Record is absent.";
+    }
+
+    void sort() {
+        std::sort(records.begin(), records.end());
+    }
+
+    template<typename TFunctor>
+    void sort(TFunctor functor) {
+        std::sort(records.begin(), records.end(), functor);
     }
 };
 
@@ -204,12 +245,16 @@ void sort_menu(Notebook& notebook) {
 
     switch(ch) {
         case '1':
+            notebook.sort();
             break;
         case '2':
+            notebook.sort(SortCompareBySurname());
             break;
         case '3':
+            notebook.sort(SortCompareByBirthDate());
             break;
         case '4':
+            notebook.sort(SortCompareByPhone());
             break;
         default:
             return;
